@@ -1,0 +1,362 @@
+﻿Here is the updated and simplified "project engineering file" prompt for ChefAI, with explicit mentions of how PHP, HTML, CSS, and JavaScript files interact within the web pages.
+________________
+
+
+ChefAI Web Application Project Specification (Simplified)
+
+
+Project Name: ChefAI - AI-Powered Recipe Creator
+Overview:
+ChefAI is a dynamic web application built with PHP and MySQL that leverages Artificial Intelligence to generate unique recipes based on user inputs. It serves as a personalized culinary assistant, allowing users to request recipes by providing available ingredients. Users can store and manage their favorite AI-created recipes through robust features for saving and viewing. The application also includes a separate administrative panel for managing users.
+________________
+
+
+1. Technology Stack
+
+
+* Frontend: HTML, CSS, JavaScript
+* Backend: PHP
+* Database: MySQL
+* AI Integration: Placeholder for an external AI service (e.g., Google Gemini API) for recipe generation.
+________________
+
+
+2. Database Design (MySQL)
+
+
+Database Name: ChefAI_DB
+SQL Queries to Create Tables:
+
+
+SQL
+
+
+
+
+-- Create Database
+CREATE DATABASE IF NOT EXISTS ChefAI_DB;
+USE ChefAI_DB;
+
+-- 1. Users Table (for normal users)
+CREATE TABLE Users (
+   user_id INT AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(50) NOT NULL UNIQUE,
+   password_hash VARCHAR(255) NOT NULL, -- Stores hashed passwords (use PASSWORD_BCRYPT)
+   email VARCHAR(100) UNIQUE,
+   profile_image VARCHAR(255) DEFAULT NULL, -- Stores file path or URL to profile image
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Admins Table (for platform administrators)
+CREATE TABLE Admins (
+   admin_id INT AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(50) NOT NULL UNIQUE,
+   password_hash VARCHAR(255) NOT NULL, -- Stores hashed passwords (use PASSWORD_BCRYPT)
+   email VARCHAR(100) UNIQUE,
+   last_login TIMESTAMP DEFAULT NULL,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Recipes Table (stores all generated/saved recipes)
+CREATE TABLE Recipes (
+   recipe_id INT AUTO_INCREMENT PRIMARY KEY,
+   recipe_name VARCHAR(255) NOT NULL,
+   ingredients TEXT NOT NULL, -- Store as JSON string or comma-separated list
+   instructions TEXT NOT NULL,
+   cooking_time VARCHAR(50), -- e.g., "30 mins", "1 hour"
+   serving_size VARCHAR(50) DEFAULT NULL,
+   difficulty VARCHAR(50) DEFAULT NULL, -- e.g., "Easy", "Medium", "Hard"
+   ai_generated BOOLEAN DEFAULT TRUE, -- TRUE if AI-generated, FALSE if manually added (future feature)
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. User_Saved_Recipes Table (Many-to-many relationship for user collections)
+CREATE TABLE User_Saved_Recipes (
+   user_id INT,
+   recipe_id INT,
+   is_favorite BOOLEAN DEFAULT FALSE, -- To mark recipes as favorites/bookmarks
+   saved_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (user_id, recipe_id), -- Composite primary key
+   FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+   FOREIGN KEY (recipe_id) REFERENCES Recipes(recipe_id) ON DELETE CASCADE
+);
+
+________________
+
+
+3. File Structure
+
+
+
+
+
+
+
+
+ChefAI/
+├── index.php             # Homepage / main application entry point (unauthenticated)
+├── login.php             # Handles user login form and processing
+├── register.php          # Handles user registration form and processing
+├── logout.php            # Handles user logout (clears session, redirects)
+
+├── db_connection.php     # PHP script for establishing database connection
+├── session_start.php     # PHP script to start or resume a session (include at top of relevant pages)
+├── config.php            # General configuration variables (e.g., AI service URL, base paths)
+├── functions.php         # Collection of reusable PHP helper functions (e.g., password hashing/verification, input sanitization, authentication/authorization checks, redirect functions)
+
+├── style.css             # Main stylesheet for the application's design
+├── script.js             # Main JavaScript file for client-side interactivity (e.g., form validation, AJAX calls)
+
+├── images/               # Directory for storing common images (logo, default profile pictures etc.)
+│   └── logo.png
+│   └── default_profile.jpg
+
+├── User/                 # Folder containing pages and logic specific to normal users
+│   ├── user_homepage.php     # The main page users see after successful login (dashboard)
+│   ├── profile.php           # User's profile viewing and editing page
+│   ├── generate_recipe.php   # Page with input forms for recipe generation and displaying results
+│   ├── saved_recipes.php     # Page to view and manage user's saved recipes
+│   └── process_user_actions.php # Backend script to handle form submissions for user actions (e.g., saving a recipe, updating profile)
+
+├── Admin/                # Folder containing pages and logic specific to administrators
+│   ├── admin_dashboard.php   # Admin's main control panel (e.g., user counts, recipe counts)
+│   ├── user_management.php   # Admin page for viewing, suspending, or deleting user accounts
+│   └── process_admin_actions.php # Backend script to handle form submissions for admin actions (e.g., deleting a user)
+
+├── API/                  # Folder for API endpoints, especially for AI communication
+│   └── ai_recipe_service.php # PHP script to handle requests to the external AI recipe generation service.
+│                             # This will contain the `fetch` call to the Gemini API.
+
+└── .env                  # (Highly Recommended) File for environment variables (sensitive data like DB credentials, AI API keys)
+└── README.md             # Project documentation (how to set up, run, dependencies)
+
+________________
+
+
+4. Core Functionalities & Implementation Details
+
+
+General Application Flow:
+1. Environment Setup:
+   * Create a .env file in the root ChefAI/ directory.
+   * Store database credentials (DB_HOST, DB_NAME, DB_USER, DB_PASS) and the AI API Key (AI_API_KEY) in this file.
+   * Implement logic in db_connection.php and API/ai_recipe_service.php to load these environment variables.
+2. db_connection.php:
+   * Use PHP Data Objects (PDO) for secure database interactions (prepared statements).
+   * Establish a connection to the ChefAI_DB MySQL database.
+   * Handle connection errors gracefully.
+3. session_start.php:
+   * Call session_start(); at the very beginning of this file.
+   * Include this file at the top of any PHP page that requires session management (e.g., login.php, User/user_homepage.php, Admin/admin_dashboard.php).
+4. config.php:
+   * Define constants like SITE_URL for consistent URL generation.
+   * Define AI_API_URL for the Gemini API endpoint.
+5. functions.php:
+   * hash_password($password): Function to hash passwords using password_hash($password, PASSWORD_BCRYPT).
+   * verify_password($password, $hash): Function to verify passwords using password_verify($password, $hash).
+   * is_logged_in(): Checks if a user session exists.
+   * is_admin(): Checks if the logged-in user is an admin (based on session data).
+   * redirect($url): Simple redirect function.
+   * sanitize_input($data): Basic input sanitization (e.g., htmlspecialchars, trim, stripslashes).
+   * generate_shopping_list($ingredients_text): Parses ingredient text into a formatted list.
+A. User Authentication & Authorization:
+* register.php:
+   * Display an HTML form for username, email, password, and password confirmation.
+   * On form submission (POST request):
+      * Sanitize inputs.
+      * Validate inputs (e.g., strong password, unique username/email).
+      * Hash the password using hash_password().
+      * Insert new user data into the Users table.
+      * Redirect to login.php on success.
+      * Display error messages on failure.
+* login.php:
+   * Display an HTML form for username/email and password.
+   * On form submission (POST request):
+      * Sanitize inputs.
+      * Fetch user (from Users or Admins table based on input, or try both) by username/email.
+      * Verify password using verify_password().
+      * If successful:
+         * Start session using session_start.php.
+         * Store user_id, username, and role ('user' or 'admin') in $_SESSION.
+         * If role is 'user', redirect to User/user_homepage.php.
+         * If role is 'admin', redirect to Admin/admin_dashboard.php.
+      * Display error messages on failure (e.g., "Invalid credentials").
+* logout.php:
+   * Include session_start.php.
+   * Destroy the session (session_destroy()).
+   * Unset all session variables (session_unset()).
+   * Redirect to login.php or index.php.
+* Access Control:
+   * For all pages within User/, include a check at the top: if (!is_logged_in() || $_SESSION['role'] !== 'user') { redirect('login.php'); exit(); }.
+   * For all pages within Admin/, include a check at the top: if (!is_logged_in() || $_SESSION['role'] !== 'admin') { redirect('login.php'); exit(); }.
+B. User Functionalities (User/ folder):
+* User/user_homepage.php:
+   * Display a welcome message to the logged-in user.
+   * Provide navigation links to generate_recipe.php, profile.php, saved_recipes.php.
+* User/profile.php:
+   * Display user's current username, email, and profile image.
+   * Provide a form to update username, email, or upload a new profile image.
+   * Profile Image Upload:
+      * Handle file uploads (PHP's $_FILES).
+      * Validate file type (e.g., JPEG, PNG) and size.
+      * Move uploaded file to images/ directory with a unique filename (e.g., user_[id]_[timestamp].[ext]).
+      * Update profile_image path in the Users table.
+   * Account Deletion:
+      * Include a "Delete Account" button/link.
+      * On click, prompt for confirmation (using a custom modal).
+      * If confirmed, send a request to User/process_user_actions.php to delete the user record from the Users table (and ON DELETE CASCADE will handle related records in User_Saved_Recipes).
+      * Log out the user and redirect to index.php.
+* User/generate_recipe.php:
+   * Display an HTML form for recipe generation inputs:
+      * Textarea for Ingredient List (comma-separated).
+   * On form submission (AJAX or POST to API/ai_recipe_service.php):
+      * Display a "Generating recipe..." loading indicator.
+      * Send user inputs to API/ai_recipe_service.php.
+      * Receive AI-generated recipe data.
+      * Display the recipe details: Recipe Name, Ingredient List (formatted), Step-by-step Instructions, Estimated Cooking Time, Serving Size (if provided), Difficulty (if provided).
+      * Include a "Save Recipe" button.
+* API/ai_recipe_service.php:
+   * Receive POST request with user inputs.
+   * Construct a prompt for the AI model based on the inputs.
+   * AI API Call (Placeholder):
+PHP
+<?php
+// Load environment variables (e.g., AI_API_KEY)
+require_once '../vendor/autoload.php'; // If using Composer for dotenv
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
+$apiKey = $_ENV['AI_API_KEY']; // Get API key from .env
+$apiUrl = $_ENV['AI_API_URL']; // e.g., "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+   $input_data = json_decode(file_get_contents('php://input'), true);
+   $ingredients = $input_data['ingredients']; // Example: "chicken, bell peppers, rice"
+
+   // Simplified prompt based on available tables
+   $prompt = "Generate a recipe using the following ingredients: " . $ingredients . ". Provide the recipe name, formatted ingredient list, step-by-step instructions, and estimated cooking time. If possible, suggest serving size and difficulty. Output as plain text.";
+
+   $chatHistory = [['role' => 'user', 'parts' => [['text' => $prompt]]]];
+   $payload = ['contents' => $chatHistory];
+
+   $ch = curl_init($apiUrl . $apiKey);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+   curl_setopt($ch, CURLOPT_POST, true);
+   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+   curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+   $response = curl_exec($ch);
+   if (curl_errno($ch)) {
+       echo json_encode(['error' => 'cURL Error: ' . curl_error($ch)]);
+       exit();
+   }
+   curl_close($ch);
+
+   $result = json_decode($response, true);
+
+   if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+       $ai_response_text = $result['candidates'][0]['content']['parts'][0]['text'];
+       // You will need to parse this plain text response into structured data
+       // for recipeName, ingredients, instructions, cooking_time, etc.
+       // This might involve simple string parsing or a more robust text-to-structure parser.
+       echo json_encode(['success' => true, 'recipe_text' => $ai_response_text]);
+   } else {
+       echo json_encode(['error' => 'Failed to get recipe from AI.', 'details' => $result]);
+   }
+} else {
+   echo json_encode(['error' => 'Invalid request method.']);
+}
+?>
+
+   * Return the AI-generated recipe data (or error) as JSON.
+   * User/saved_recipes.php:
+   * Fetch recipes from User_Saved_Recipes and Recipes tables for the logged-in user.
+   * Display a list of saved recipes.
+   * Allow users to Favorite/Unfavorite a recipe (update is_favorite in User_Saved_Recipes).
+   * Allow users to Delete a saved recipe (delete from User_Saved_Recipes).
+   * Recipe Utility Features (Buttons/Links):
+   * Print Recipe: A button that opens a new window/tab with a print-friendly version of the recipe.
+   * Shopping List Generator: A button that extracts ingredients from the displayed recipe into a copyable text area. Use functions.php::generate_shopping_list().
+   * User/process_user_actions.php:
+   * This script will handle various POST requests from user forms (e.g., "Save Recipe" from generate_recipe.php, "Update Profile" from profile.php, "Delete Account" from profile.php, "Add/Remove Favorite").
+   * Include db_connection.php and functions.php.
+   * Use $_SESSION['user_id'] to identify the current user.
+   * Perform database operations (INSERT, UPDATE, DELETE) based on the action requested.
+   * Redirect back to the appropriate user page with success/error messages.
+C. Admin Functionalities (Admin/ folder):
+   * Admin/admin_dashboard.php:
+   * Display a summary of platform activity (e.g., total users, total recipes, recent recipe generations).
+   * Provide navigation links to user_management.php.
+   * Admin/user_management.php:
+   * Display a list of all registered users (from the Users table).
+   * For each user, provide options to:
+   * View Details: Show more information about the user.
+   * Suspend/Activate: (Conceptual) Update a status field in the Users table if added.
+   * Delete Account: A button that sends a request to Admin/process_admin_actions.php to delete the user from the Users table.
+   * Admin/process_admin_actions.php:
+   * This script will handle various POST requests from admin forms (e.g., "Delete User").
+   * Include db_connection.php and functions.php.
+   * Ensure is_admin() check is performed.
+   * Perform database operations.
+   * Redirect back to the appropriate admin page with success/error messages.
+________________
+
+
+5. Frontend (HTML, CSS, JavaScript)
+
+
+   * HTML Structure (.php files will contain HTML):
+   * Use semantic HTML5 elements.
+   * Ensure all forms have appropriate method="POST" and action attributes pointing to the correct PHP processing scripts.
+   * PHP Includes: HTML files (which are actually .php files in this structure) will use PHP include or require statements to pull in common components. For instance, at the top of most pages:
+PHP
+<?php
+require_once 'session_start.php'; // Starts the session
+require_once 'db_connection.php'; // Connects to the database
+require_once 'functions.php';     // Loads utility functions
+// Optional: Include header content from a file
+// include 'includes/header.php'; // If you had an 'includes' folder for header/footer
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Page Title</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <script src="script.js"></script>
+</body>
+</html>
+
+      * CSS (style.css):
+      * Implement a clean, responsive design.
+      * Ensure good typography and color contrast.
+      * Style forms, buttons, and navigation clearly.
+      * Provide visual feedback for interactive elements (hover states, active states).
+      * JavaScript (script.js):
+      * Linking: The script.js file will be linked in the HTML using a <script> tag:
+HTML
+<script src="script.js"></script>
+
+This tag is typically placed at the end of the <body> element to ensure HTML content is loaded before scripts try to manipulate it.
+      * Form Validation: Implement client-side validation for registration, login, and recipe generation forms to provide immediate feedback to users.
+      * AJAX for Recipe Generation: Use fetch API or XMLHttpRequest to send data to API/ai_recipe_service.php and dynamically update generate_recipe.php with the AI response without a full page reload.
+      * Confirmation Modals: Implement custom modal dialogs for actions like "Delete Account" or "Delete Saved Recipe" instead of alert() or confirm().
+      * Dynamic UI Updates: Update parts of the page dynamically (e.g., showing/hiding loading indicators, updating saved recipe lists).
+      * Shopping List Copy: Implement a function to copy the generated shopping list text to the clipboard.
+________________
+
+
+6. Security Considerations
+
+
+         * Password Hashing: Always use password_hash() and password_verify() with PASSWORD_BCRYPT.
+         * Input Sanitization: Sanitize all user inputs before processing or displaying them to prevent XSS (Cross-Site Scripting) and SQL injection. Use PDO prepared statements for database queries.
+         * Session Management: Use secure session practices (e.g., session_start() at the top, regenerating session IDs, setting appropriate cookie parameters).
+         * Error Reporting: Disable detailed error reporting in production environments to prevent information disclosure.
+         * File Uploads: Implement strict validation for uploaded files (type, size, and ensure they are not executable scripts). Store uploaded files outside the web root if possible, and store only their paths in the database.
+________________
