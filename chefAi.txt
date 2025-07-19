@@ -1,6 +1,4 @@
-﻿Here is the updated and simplified "project engineering file" prompt for ChefAI, with explicit mentions of how PHP, HTML, CSS, and JavaScript files interact within the web pages.
-________________
-
+﻿
 
 ChefAI Web Application Project Specification (Simplified)
 
