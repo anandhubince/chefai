@@ -4,6 +4,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        /* Add to style.css or in a <style> block */
+.hero-section {
+    position: relative;
+    min-height: 400px;
+    background: url('images/pre-prepared-food-showcasing-ready-eat-delicious-meals-go.jpg') center center/cover no-repeat;
+    color: #fff;
+}
+
+.hero-background-image {
+    display: none; /* Hide the <img> if using background-image */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); /* Darker overlay for better contrast */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 100px 20px 40px 20px;
+}
+
+.hero-content h1,
+.hero-content p {
+    text-shadow: 0 2px 12px rgba(0,0,0,0.9); /* Stronger shadow for readability */
+}
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChefAI - Your AI-Powered Culinary Assistant</title>
@@ -32,7 +64,7 @@
 
     <!-- 1. Hero Section -->
     <section class="section hero-section">
-        <img src="images/image.png" alt="ChefAI Background" class="hero-background-image">
+        <img src="images/pre-prepared-food-showcasing-ready-eat-delicious-meals-go.jpg" alt="ChefAI Background" class="hero-background-image">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Never Wonder What to Cook Again</h1>
