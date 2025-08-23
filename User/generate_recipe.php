@@ -188,6 +188,32 @@ body {
       background: var(--card-strong); color: var(--text); outline: none; font-size: 0.95rem;
       box-shadow: inset 0 2px 6px rgba(2,6,23,.05);
     }
+    .input-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .input-wrapper .input {
+      flex-grow: 1;
+    }
+    .input-wrapper .add-btn {
+      flex-shrink: 0;
+      padding: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background-color .2s;
+    }
+    .input-wrapper .add-btn:hover {
+      background: var(--accent-2);
+    }
 
     /* ===============================
        ACTIONS / BUTTONS
@@ -292,7 +318,10 @@ body {
     <section id="builder" class="panel grid" aria-live="polite" data-tilt="true">
       <div class="section">
         <h3>Ingredients</h3>
-        <input id="ingInput" class="input" placeholder="Type and press Enter… e.g., chicken, pasta" />
+        <div class="input-wrapper">
+          <input id="ingInput" class="input" placeholder="Type an ingredient..." />
+          <button id="addIngBtn" class="add-btn" aria-label="Add Ingredient">+</button>
+        </div>
         <div id="ingChips" class="chips" style="margin-top:10px">
           <button class="chip" data-val="Chicken">🍗 Chicken</button>
           <button class="chip" data-val="Eggs">🥚 Eggs</button>
