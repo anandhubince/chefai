@@ -19,20 +19,19 @@
     }
    
     .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        background-color: var(--background-color);
-        box-shadow: 0 4px 12px var(--shadow-color);
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
+           display: flex;
+           justify-content: space-between;
+           align-items : center;
+           padding: 1rem 2rem;
+           background-color:var(--background-color);
+           box-shadow: 0 2px 4px var(--shadow-color);
+           position: fixed;
+           top : 0;
+           left : 0;
+           width : 100%;
+           z-index: 1000;
     }
-
-    .navbar-logo {
+     .navbar-logo {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--primary-color);

@@ -31,9 +31,11 @@
     padding: 100px 20px 40px 20px;
 }
 
-.hero-content h1,
+/* Add this to your style.css or inside a <style> block in index.php */
 .hero-content p {
-    text-shadow: 0 2px 12px rgba(0,0,0,0.9); /* Stronger shadow for readability */
+    color: #ffe; /* Light yellow for better contrast */
+    font-weight: 500;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.9); /* Already present, keeps readability */
 }
     </style>
     <meta charset="UTF-8">

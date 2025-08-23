@@ -71,21 +71,50 @@ include("C:/xampp/htdocs/ChefAI/User/navigation.php");
     .blob.one { width: 420px; height: 420px; left:-80px; top:-80px; background: conic-gradient(from 120deg, #22c55e, #3b82f6, #8b5cf6, #22c55e); border-radius: 50%; }
     .blob.two { width: 520px; height: 520px; right:-120px; top:-60px; background: conic-gradient(from -60deg, #f59e0b, #ef4444, #8b5cf6, #f59e0b); border-radius: 50%; opacity:.25; }
 
-    .container {
-      max-width: 1200px;
-      margin: 72px auto;
-      padding: 0 20px;
-      position: relative; z-index: 1;
-    }
+  
+// ...existing code...
+   /* Add enough top padding for your fixed navigation height */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+  padding-top: 120px; /* adjust based on nav height */
+}
+/* Navigation bar fix */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* adjust to match actual nav height */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: rgba(255, 255, 255, 0.7); /* light glass effect */
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+/* Add padding so content clears the navbar */
+body {
+  padding-top: 80px; /* must equal navbar height */
+}
 
-    .hero {
-      display: grid;
-      gap: 18px;
-      justify-items: center;
-      text-align: center;
-      margin-bottom: 18px;
-      perspective: 1000px;
-    }
+// ...existing code...
+
+.hero {
+  display: flex;
+  flex-direction: column;   /* stack vertically */
+  justify-content: center;  /* center vertically in container */
+  align-items: center;      /* center horizontally */
+  text-align: center;
+  gap: 18px;
+  padding: 40px 0;          /* spacing top and bottom */
+}
+
     .hero h1 {
       font-family: Poppins, Inter, system-ui;
       font-weight: 800;

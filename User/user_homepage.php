@@ -69,6 +69,7 @@ if (!is_logged_in() || is_admin()) {
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: var(--white);
   overflow-x: hidden;
+  padding-top: 80px; /* match navbar height */
 }
     /* Animated gradient waves background */
     .wave {
@@ -113,17 +114,20 @@ if (!is_logged_in() || is_admin()) {
 
     /* Navbar */
     .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(12px);
-      z-index: 1000;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;           /* make sure it aligns properly */
+  width: 100%;
+  padding: 1rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  box-sizing: border-box; /* avoids overflow */
+}
+
     .navbar-logo {
       font-size: 2rem;
       font-weight: 700;
