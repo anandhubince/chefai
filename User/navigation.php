@@ -17,7 +17,7 @@
         font-family: 'Poppins', sans-serif;
         background-color: #f0f2f5;
     }
-
+   
     .navbar {
         display: flex;
         justify-content: space-between;

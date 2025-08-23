@@ -62,17 +62,14 @@ if (!is_logged_in() || is_admin()) {
     }
 
     /* Reset + background */
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-
+   body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: var(--white);
+  overflow-x: hidden;
+}
     /* Animated gradient waves background */
     .wave {
       position: fixed;
@@ -155,7 +152,6 @@ if (!is_logged_in() || is_admin()) {
 
     /* Hero section */
     .hero {
-      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -248,7 +244,7 @@ if (!is_logged_in() || is_admin()) {
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1>Welcome,! <?php echo $_SESSION['username']; ?>!</h1>
+    <h1>Welcome, <?php echo $_SESSION['username']; ?>!</h1>
     <p>Your personal AI chef 🍴 — discover, generate, and save delicious recipes made just for you.</p>
     <div class="nav-buttons">
       <a href="generate_recipe.php" class="btn">✨ Generate Recipe</a>

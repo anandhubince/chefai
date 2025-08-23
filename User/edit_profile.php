@@ -71,79 +71,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         :root {
             --primary-green: #4CAF50;
             --secondary-green: #2E8B57;
-            --accent-green: #6EE7B7;
-            --light: #ffffff;
-            --dark: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --border: rgba(255, 255, 255, 0.25);
+            --card-bg: #f0fff4;
+            --light-green: #e6f7ee;
+            --dark: #222;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #4CAF50, #2E8B57, #3ECF8E);
-            background-size: 400% 400%;
-            animation: gradientShift 12s ease infinite;
-            color: var(--dark);
+            background: var(--light-green);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 2rem;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+       /* Add this margin to push the container below the navbar */
+.container {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    max-width: 450px;
+    width: 100%;
+    margin-top: 7rem; /* <-- Add this line */
+}
+// ...existing code...
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--light);
+            color: var(--secondary-green);
             margin-bottom: 1.5rem;
         }
 
         .profile-pic {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 5px solid var(--accent-green);
-            box-shadow: 0 0 25px rgba(110, 231, 183, 0.6);
-            margin-bottom: 2rem;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .profile-pic:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 40px rgba(110, 231, 183, 0.9);
+            object-fit: cover;
+            border: 4px solid var(--primary-green);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.3);
         }
 
         .message {
-            color: var(--accent-green);
+            color: var(--primary-green);
             font-weight: 600;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
         }
 
         form {
@@ -154,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
             margin-bottom: 0.4rem;
             font-weight: 600;
-            color: var(--light);
+            color: var(--secondary-green);
         }
 
         input[type="text"],
@@ -163,61 +139,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input[type="file"] {
             width: 100%;
             padding: 12px;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: var(--light);
+            margin-bottom: 1.2rem;
+            border-radius: 12px;
+            border: 2px solid #d9d9d9;
             font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input::placeholder {
-            color: rgba(255,255,255,0.7);
+            transition: 0.3s ease;
         }
 
         input:focus {
+            border-color: var(--primary-green);
             outline: none;
-            border-color: var(--accent-green);
-            box-shadow: 0 0 12px rgba(110, 231, 183, 0.6);
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.2);
         }
 
         .btn {
-            display: inline-block;
-            padding: 14px 28px;
-            border-radius: 12px;
-            text-decoration: none;
+            display: block;
+            width: 100%;
+            padding: 12px;
             border: none;
-            background: linear-gradient(135deg, #4CAF50, #2E8B57);
-            color: var(--light);
+            border-radius: 30px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-            width: 100%;
             margin-top: 0.5rem;
+            transition: 0.3s ease;
+            background: var(--primary-green);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: var(--secondary-green);
+            transform: translateY(-2px);
         }
 
         .btn-link {
-            background: transparent;
-            border: 2px solid var(--light);
-            color: var(--light);
+            background: #fff;
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
         }
 
         .btn-link:hover {
-            background: rgba(255,255,255,0.2);
+            background: var(--primary-green);
+            color: #fff;
         }
 
         .link-group {
-            margin-top: 1.5rem;
-            display: flex;
-            justify-content: center;
+            margin-top: 1.2rem;
         }
     </style>
 </head>
