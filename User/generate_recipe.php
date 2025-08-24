@@ -164,7 +164,7 @@ body {
     @media (max-width: 980px){ .grid { grid-template-columns: 1fr; } }
 
     .section { padding: 18px 18px 12px; }
-    .section h3 { margin: 0 0 12px; font-family: Poppins, Inter; font-size: 1.05rem; letter-spacing: .2px; color: var(--text); }
+    .section h3 { margin: 0 0 16px; font-family: Poppins, Inter; font-size: 1.1rem; letter-spacing: .3px; color: var(--text); padding-bottom: 10px; border-bottom: 1px solid var(--ring-muted); }
     .chips { display: flex; flex-wrap: wrap; gap: 10px; }
     .chip {
       display: inline-flex; align-items: center; gap: 8px;
@@ -292,6 +292,41 @@ body {
 
     /* UTIL */
     .hidden { display: none !important; }
+
+    .review-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+.summary-item {
+  background: var(--card-strong);
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--ring-muted);
+  box-shadow: var(--shadow-sm);
+  transition: transform .2s ease;
+}
+
+.summary-item:hover {
+    transform: translateY(-3px);
+}
+
+.summary-item strong {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.summary-item span {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--accent-2);
+  word-wrap: break-word;
+}
   </style>
 </head>
 <body>
@@ -305,7 +340,6 @@ body {
       <h1>Quick Recipe Genius</h1>
       <p>Create stunning, tailored recipes in seconds. Choose ingredients & vibes — we’ll plate up something delicious ✨</p>
       <div class="toolbar">
-       
         <span style="color:var(--muted);font-weight:600">Dark Mode</span>
         <label class="switch" aria-label="Toggle dark mode">
           <input id="themeToggle" type="checkbox" />
@@ -344,7 +378,6 @@ body {
         </div><br>
          <h3>Meal Type</h3>
         <div class="chips" style="margin-top:12px" id="mealChips">
-         
          <button class="chip" data-val="Breakfast">Breakfast</button>
           <button class="chip" data-val="Lunch">Lunch</button>
           <button class="chip" data-val="Dinner">Dinner</button>
@@ -389,74 +422,23 @@ body {
       </div>
     </section>
 
-    <!-- LOADER -->
-    <section id="loader" class="panel loader-wrap" aria-hidden="true" data-tilt="true">
-      <div>
-        <div class="chef">
-          <div class="pan"><div class="handle"></div></div>
-          <div class="steam"></div><div class="steam"></div><div class="steam"></div>
-          <div class="egg"></div>
+    <!-- REVIEW SELECTIONS -->
+    <section id="review" class="panel hidden" data-tilt="true">
+      <div class="section">
+        <div style="text-align:center; margin-bottom: 24px;">
+          <h3 style="font-family: Poppins, Inter; font-size: 1.5rem; letter-spacing: .2px; margin-bottom: 8px; border-bottom: none;">Confirm Your Recipe</h3>
+          <p style="color: var(--muted); max-width: 500px; margin: auto;">One last look before we fire up the stove! Make sure your selections are just right.</p>
         </div>
-        <div id="loaderText" class="loader-text">Chopping veggies… 🍅</div>
-      </div>
-    </section>
-
-    <!-- RESULT -->
-    <section id="result" class="panel result" aria-live="polite" data-tilt="true">
-      <div class="recipe">
-        <div class="title" id="rTitle">—</div>
-        <div class="meta">
-          <div class="meta-card"><small>Time</small><b id="rTime">—</b></div>
-          <div class="meta-card"><small>Servings</small><b id="rServings">—</b></div>
-          <div class="meta-card"><small>Difficulty</small><b id="rDiff">—</b></div>
+        <div id="reviewSummary" class="review-summary-grid">
+            <!-- Selections will be populated here by JS -->
         </div>
-        <div class="cols">
-          <div class="card">
-            <h4>Ingredients</h4>
-            <ul id="rIngs" class="fancy"></ul>
-          </div>
-          <div class="card">
-            <h4>Instructions</h4>
-            <ol id="rSteps" class="fancy"></ol>
-          </div>
-        </div>
-        <div class="card" style="margin-top:14px">
-          <h4>Nutrition (per serving)</h4>
-          <div class="rings">
-            <div class="ring"><div class="circle" style="--val:72"><span id="calories">420kcal</span></div><small>Calories</small></div>
-            <div class="ring"><div class="circle" style="--val:58"><span id="protein">22g</span></div><small>Protein</small></div>
-            <div class="ring"><div class="circle" style="--val:64"><span id="carbs">48g</span></div><small>Carbs</small></div>
-            <div class="ring"><div class="circle" style="--val:40"><span id="fat">14g</span></div><small>Fat</small></div>
-          </div>
-        </div>
-        <div class="actions" style="margin-top:8px">
-          <button id="startOverBtn" class="btn alt">↩️ Start Over</button>
-          <button id="saveBtn" class="btn">💾 Save</button>
-          <button id="copyBtn" class="btn violet">📋 Copy</button>
-        </div>
-        <div class="actions" style="margin-top:-8px">
-          <button id="printBtn" class="btn alt">🖨️ Print</button>
-          <button id="shareBtn" class="btn">🔗 Share</button>
-          <button id="newBtn" class="btn violet">🎲 New Recipe</button>
+        <div class="actions" style="grid-template-columns: 1fr 1fr; max-width: 480px; margin: 24px auto 0;">
+            <button id="editBtn" class="btn alt">✏️ Back to Builder</button>
+            <button id="confirmBtn" class="btn">🔥 Let's Cook!</button>
         </div>
       </div>
     </section>
-
-    <div id="toast" class="toast" role="status" aria-live="polite">✅ Saved!</div>
-    <div id="rain" class="emoji-rain hidden" aria-hidden="true"></div>
   </div>
-
-  <!-- Saved Drawer -->
-  <aside id="savedDrawer" class="drawer" aria-hidden="true">
-    <header>
-      <strong>Saved Recipes</strong>
-      <div>
-        <button id="exportAll" class="btn alt" style="padding:8px 12px;border-radius:10px">⬇️ Export</button>
-        <button id="closeDrawer" class="btn" style="padding:8px 12px;border-radius:10px">✖</button>
-      </div>
-    </header>
-    <div id="savedList" class="list"></div>
-  </aside>
 
   <script>
     /* ===============================
@@ -475,7 +457,7 @@ body {
     })();
 
     /* ===============================
-       PARALLAX + TILT
+       UI/UX ENHANCEMENTS
     =================================*/
     const parallax = document.querySelector('.parallax');
     window.addEventListener('mousemove', (e)=>{
@@ -499,30 +481,16 @@ body {
     document.querySelectorAll('[data-tilt="true"]').forEach(attachTilt);
 
     /* ===============================
-       ELEMENTS
+       CORE LOGIC
     =================================*/
     const builder = document.getElementById('builder');
-    const loader = document.getElementById('loader');
-    const loaderText = document.getElementById('loaderText');
-    const result = document.getElementById('result');
-    const toast = document.getElementById('toast');
-    const rain = document.getElementById('rain');
-
-    const rTitle = document.getElementById('rTitle');
-    const rTime = document.getElementById('rTime');
-    const rServings = document.getElementById('rServings');
-    const rDiff = document.getElementById('rDiff');
-    const rIngs = document.getElementById('rIngs');
-    const rSteps = document.getElementById('rSteps');
-
+    const review = document.getElementById('review');
     const ingInput = document.getElementById('ingInput');
 
-    const openSaved = document.getElementById('openSaved');
-    const savedDrawer = document.getElementById('savedDrawer');
-    const closeDrawer = document.getElementById('closeDrawer');
-    const savedList = document.getElementById('savedList');
+    function show(el){ el.classList.remove('hidden'); el.style.display = 'grid'; }
+    function hide(el){ el.style.display = 'none'; el.classList.add('hidden'); }
 
-    /* CHIP SELECTORS */
+    // Chip selection
     function toggleChip(e){
       const chip = e.target.closest('.chip');
       if(!chip) return;
@@ -533,273 +501,86 @@ body {
       e.currentTarget.style.setProperty('--x', (e.clientX - r.left) + 'px');
       e.currentTarget.style.setProperty('--y', (e.clientY - r.top) + 'px');
     }
-    document.querySelectorAll('.chip').forEach(c => {
-      c.addEventListener('click', toggleChip);
+    document.querySelectorAll('.chip, .btn').forEach(c => {
       c.addEventListener('mousedown', addRipplePosition);
+      if (c.classList.contains('chip')) {
+        c.addEventListener('click', toggleChip);
+      }
     });
 
+    // Add ingredient from input
     ingInput.addEventListener('keydown', (e)=>{
       if(e.key==='Enter' && ingInput.value.trim()){
         const val = ingInput.value.trim();
         const btn = document.createElement('button');
-        btn.className = 'chip selected'; btn.dataset.val = val; btn.textContent = val;
+        btn.className = 'chip'; btn.dataset.val = val; btn.textContent = val;
         btn.addEventListener('click', toggleChip); btn.addEventListener('mousedown', addRipplePosition);
         document.getElementById('ingChips').appendChild(btn);
         ingInput.value = '';
       }
     });
 
-    /* ACTION BUTTONS */
-    ['createBtn','surpriseBtn','saveBtn','startOverBtn','copyBtn','printBtn','shareBtn','newBtn','clearBtn','openSaved','closeDrawer','exportAll'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el){ el.addEventListener('mousedown', addRipplePosition); }
-    });
-
-    document.getElementById('createBtn').addEventListener('click', () => generate(false));
-    document.getElementById('surpriseBtn').addEventListener('click', () => generate(true));
-    document.getElementById('newBtn').addEventListener('click', () => generate(true));
-    document.getElementById('clearBtn').addEventListener('click', clearSelections);
-
-    const loaderMessages = [
-      'Chopping veggies… 🍅',
-      'Heating the pan… 🔥',
-      'Simmering flavors… 🫕',
-      'Plating it pretty… 🍽️',
-      'Taste testing… 😋'
-    ];
-
-    function show(el){ el.classList.remove('hidden'); el.style.display = 'grid'; }
-    function hide(el){ el.style.display = 'none'; el.classList.add('hidden'); }
-
+    // Collect all selections
     function vals(containerId){
       return Array.from(document.querySelectorAll('#'+containerId+' .chip.selected')).map(x => x.dataset.val);
     }
     function collectSelections(){
-      const ings = Array.from(document.querySelectorAll('#ingChips .chip.selected')).map(x=>x.dataset.val);
-      const cuisine = vals('cuisineChips')[0] || 'Any';
-      const meal = vals('mealChips')[0] || 'Any';
-      const servings = vals('servingChips')[0] || 'Any';
-      const time = vals('timeChips')[0] || 'Any';
-      const diff = vals('diffChips')[0] || 'Any';
-      const diet = vals('dietChips');
-      return {ings, cuisine, meal, servings, time, diff, diet};
-    }
-
-    function clearSelections(){
-      document.querySelectorAll('.chip.selected').forEach(el=>el.classList.remove('selected'));
-      ingInput.value = '';
-      toastMsg('Selections cleared');
-    }
-
-    function generate(isSurprise){
-      // clear any leftover animations
-      rain.innerHTML = ''; hide(rain); toast.classList.remove('show');
-
-      const sel = collectSelections();
-      hide(builder); show(loader);
-
-      // Rotate loader text
-      let i = 0; loaderText.textContent = loaderMessages[0];
-      const tick = setInterval(()=>{
-        i = (i+1) % loaderMessages.length;
-        loaderText.textContent = loaderMessages[i];
-      }, 900);
-
-      // TODO: Plug your API here. For now we mock a recipe.
-      setTimeout(()=>{
-        clearInterval(tick);
-        hide(loader);
-        fillRecipe(mockRecipe(sel, isSurprise));
-        revealResult();
-      }, 1900 + Math.random()*900);
-    }
-
-    function fillRecipe(data){
-      rTitle.textContent = data.title;
-      rTime.textContent = data.time;
-      rServings.textContent = data.servings;
-      rDiff.textContent = data.difficulty;
-
-      rIngs.innerHTML = '';
-      data.ingredients.forEach((t,idx)=>{
-        const li = document.createElement('li'); li.style.setProperty('--i', idx);
-        li.textContent = t; rIngs.appendChild(li);
-      });
-      rSteps.innerHTML = '';
-      data.instructions.forEach((t,idx)=>{
-        const li = document.createElement('li'); li.style.setProperty('--i', idx);
-        li.textContent = t; rSteps.appendChild(li);
-      });
-
-      if(data.nutrition){
-        document.getElementById('calories').textContent = data.nutrition.calories + 'kcal';
-        document.getElementById('protein').textContent = data.nutrition.protein + 'g';
-        document.getElementById('carbs').textContent = data.nutrition.carbs + 'g';
-        document.getElementById('fat').textContent = data.nutrition.fat + 'g';
-      }
-
-      // cache current recipe for Save/Share
-      window.__currentRecipe = data;
-    }
-
-    function revealResult(){
-      result.style.display = 'block';
-      result.classList.remove('hidden');
-      result.animate([
-        { opacity: 0, transform: 'translateY(14px) scale(.98)' },
-        { opacity: 1, transform: 'translateY(0) scale(1)' }
-      ], { duration: 420, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
-    }
-
-    document.getElementById('startOverBtn').addEventListener('click', ()=>{
-      hide(result);
-      clearSelections();
-      show(builder);
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', ()=>{
-      if(!window.__currentRecipe){ toastMsg('No recipe yet'); return; }
-      // localStorage save
-      const list = JSON.parse(localStorage.getItem('qrg-saves')||'[]');
-      const id = Date.now();
-      list.unshift({ id, ts: new Date().toISOString(), data: window.__currentRecipe });
-      localStorage.setItem('qrg-saves', JSON.stringify(list.slice(0,100)));
-      renderSaved();
-
-      // Toast
-      toastMsg('✅ Saved!');
-
-      // Emoji rain
-      rain.innerHTML = '';
-      show(rain);
-      const EMOJIS = ['🍕','🥗','🍜','🍰','🌮','🍣','🍹'];
-      const total = 30;
-      for(let i=0;i<total;i++){
-        const span = document.createElement('span');
-        span.className = 'emoji';
-        span.textContent = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
-        span.style.left = Math.random()*100 + 'vw';
-        span.style.top = (Math.random()*-20 - 5) + 'vh';
-        span.style.animationDuration = (1 + Math.random()*1.5) + 's';
-        rain.appendChild(span);
-      }
-      // Auto clear so it never blocks next generation
-      setTimeout(()=>{ rain.classList.add('hidden'); rain.innerHTML=''; }, 2200);
-    });
-
-    document.getElementById('copyBtn').addEventListener('click', async ()=>{
-      if(!window.__currentRecipe){ toastMsg('Nothing to copy'); return; }
-      const t = serializeRecipe(window.__currentRecipe);
-      await navigator.clipboard.writeText(t);
-      toastMsg('Copied to clipboard');
-    });
-
-    document.getElementById('printBtn').addEventListener('click', ()=>{
-      window.print();
-    });
-
-    document.getElementById('shareBtn').addEventListener('click', async ()=>{
-      if(!window.__currentRecipe){ toastMsg('Nothing to share'); return; }
-      const data = window.__currentRecipe;
-      const text = serializeRecipe(data);
-      if(navigator.share){
-        try { await navigator.share({ title: data.title, text }); toastMsg('Shared'); } catch(e){ /* ignore */ }
-      } else {
-        await navigator.clipboard.writeText(text);
-        toastMsg('Share not supported — copied');
-      }
-    });
-
-    document.getElementById('openSaved').addEventListener('click', ()=>{
-      savedDrawer.classList.add('open');
-      document.getElementById('openSaved').setAttribute('aria-expanded','true');
-      renderSaved();
-    });
-    document.getElementById('closeDrawer').addEventListener('click', ()=>{
-      savedDrawer.classList.remove('open');
-      document.getElementById('openSaved').setAttribute('aria-expanded','false');
-    });
-
-    document.getElementById('exportAll').addEventListener('click', ()=>{
-      const list = JSON.parse(localStorage.getItem('qrg-saves')||'[]');
-      const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'recipes.json'; a.click();
-      URL.revokeObjectURL(url);
-      toastMsg('Exported recipes.json');
-    });
-
-    function renderSaved(){
-      const list = JSON.parse(localStorage.getItem('qrg-saves')||'[]');
-      savedList.innerHTML = '';
-      if(!list.length){ savedList.innerHTML = '<p style="color:var(--muted)">No saved recipes yet.</p>'; return; }
-      list.forEach(item=>{
-        const card = document.createElement('div');
-        card.className = 'save-card';
-        const date = new Date(item.ts).toLocaleString();
-        card.innerHTML = `<h5>${item.data.title}</h5><small>${date} • ${item.data.time} • ${item.data.servings} • ${item.data.difficulty}</small>`;
-        card.addEventListener('click', ()=>{
-          fillRecipe(item.data);
-          revealResult();
-          savedDrawer.classList.remove('open');
-        });
-        // right-click to delete
-        card.addEventListener('contextmenu', (ev)=>{
-          ev.preventDefault();
-          const yes = confirm('Delete this saved recipe?');
-          if(yes){
-            const next = list.filter(x=>x.id !== item.id);
-            localStorage.setItem('qrg-saves', JSON.stringify(next));
-            renderSaved();
-          }
-        });
-        savedList.appendChild(card);
-      });
-    }
-
-    function serializeRecipe(d){
-      return `${d.title}\n\nTime: ${d.time}\nServings: ${d.servings}\nDifficulty: ${d.difficulty}\n\nIngredients:\n- ${d.ingredients.join('\n- ')}\n\nInstructions:\n${d.instructions.map((s,i)=>`${i+1}. ${s}`).join('\n')}`;
-    }
-
-    function toastMsg(msg){
-      toast.textContent = msg; toast.classList.add('show');
-      setTimeout(()=> toast.classList.remove('show'), 1600);
-    }
-
-    /* ===============================
-       MOCK DATA (replace with API)
-    =================================*/
-    function mockRecipe(sel, isSurprise){
-      const base = sel.ings.length ? sel.ings.slice(0,3).join(', ') : 'chef\'s pantry mix';
-      const title = isSurprise ? 'Chef\'s Surprise Bowl' : `${sel.cuisine !== 'Any' ? sel.cuisine+' ' : ''}${base} Delight`;
-      const servings = sel.servings === 'Any' ? '2' : sel.servings;
-      const time = sel.time === 'Any' ? '30-40 min' : sel.time;
-      const diff = sel.diff === 'Any' ? 'Easy' : sel.diff;
       return {
-        title,
-        time,
-        servings,
-        difficulty: diff,
-        ingredients: [
-          '2 tbsp olive oil',
-          '1 onion, finely chopped',
-          '2 cloves garlic, minced',
-          `${sel.ings[0] || 'protein of choice'} (250g)`,
-          '1 cup tomatoes or sauce',
-          'Salt & pepper to taste',
-          'Fresh herbs to finish'
-        ],
-        instructions: [
-          'Warm oil in a pan over medium heat.',
-          'Sauté onion 3–4 min; add garlic 30 sec.',
-          'Add protein; cook until lightly browned.',
-          'Stir in tomatoes/sauce; simmer 8–10 min.',
-          'Season, garnish, and serve hot.'
-        ],
-        nutrition: { calories: 420, protein: 22, carbs: 48, fat: 14 }
+        ings: vals('ingChips'),
+        cuisine: vals('cuisineChips')[0] || 'Any',
+        meal: vals('mealChips')[0] || 'Any',
+        servings: vals('servingChips')[0] || 'Any',
+        time: vals('timeChips')[0] || 'Any',
+        diff: vals('diffChips')[0] || 'Any',
+        diet: vals('dietChips')
       };
     }
+
+    // Review and Redirect logic
+    function showReview() {
+      const sel = collectSelections();
+      const summaryDiv = document.getElementById('reviewSummary');
+      const items = [
+        { label: 'Ingredients', value: sel.ings.length > 0 ? sel.ings.join(', ') : 'Any' },
+        { label: 'Cuisine', value: sel.cuisine },
+        { label: 'Meal Type', value: sel.meal },
+        { label: 'Servings', value: sel.servings },
+        { label: 'Cooking Time', value: sel.time },
+        { label: 'Difficulty', value: sel.diff },
+        { label: 'Dietary', value: sel.diet.length > 0 ? sel.diet.join(', ') : 'None' }
+      ];
+      summaryDiv.innerHTML = items.map(item => `
+        <div class="summary-item">
+          <strong>${item.label}</strong>
+          <span>${item.value}</span>
+        </div>
+      `).join('');
+      hide(builder);
+      show(review);
+    }
+
+    function redirectToResult(isSurprise) {
+      let selections = {};
+      if (!isSurprise) {
+        selections = collectSelections();
+      }
+      const encodedSelections = encodeURIComponent(JSON.stringify(selections));
+      window.location.href = `recipe_result.php?selections=${encodedSelections}`;
+    }
+
+    // Button event listeners
+    document.getElementById('createBtn').addEventListener('click', showReview);
+    document.getElementById('surpriseBtn').addEventListener('click', () => redirectToResult(true));
+    document.getElementById('clearBtn').addEventListener('click', () => {
+        document.querySelectorAll('.chip.selected').forEach(el=>el.classList.remove('selected'));
+        ingInput.value = '';
+    });
+    document.getElementById('editBtn').addEventListener('click', () => {
+      hide(review);
+      show(builder);
+    });
+    document.getElementById('confirmBtn').addEventListener('click', () => redirectToResult(false));
+
   </script>
 </body>
 </html>
