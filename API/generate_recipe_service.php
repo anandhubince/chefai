@@ -95,6 +95,18 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     exit;
 }
 
+// --- FIX: Decode stringified JSON fields from AI response ---
+$fieldsToDecode = ['ingredients', 'instructions', 'chefTips'];
+foreach ($fieldsToDecode as $field) {
+    if (isset($recipeJson[$field]) && is_string($recipeJson[$field])) {
+        $decodedField = json_decode($recipeJson[$field], true);
+        // If decoding is successful, replace the string with the array
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $recipeJson[$field] = $decodedField;
+        }
+    }
+}
+
 echo json_encode($recipeJson);
 
 ?>
