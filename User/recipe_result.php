@@ -251,7 +251,7 @@ $selections_json = isset($_GET['selections']) ? urldecode($_GET['selections']) :
         if (typeof ing === 'object' && ing.item) {
           return `<li><strong>${ing.item}:</strong> ${ing.quantity || ''} <em>${ing.notes || ''}</em></li>`;
         }
-        return `<li>${ing}</li>`; // Fallback for simple string ingredients
+        return `<li>${ing}</li>`; // Fallback f or simple string ingredients
       }).join('');
 
       const instructionsHtml = (data.instructions || []).map(instr => {
